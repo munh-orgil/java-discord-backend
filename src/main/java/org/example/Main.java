@@ -9,7 +9,7 @@ import org.example.socket.Server;
 public class Main {
     public static void main(String[] args) throws Exception {
         Database.setUp();
-        Seeder.Init();
+//        Seeder.Init();
         Server.Init();
     }
 }

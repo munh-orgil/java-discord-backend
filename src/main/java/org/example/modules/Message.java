@@ -37,7 +37,7 @@ public class Message implements Serializable {
 		createdAt = new Timestamp(System.currentTimeMillis());
 	}
 
-	public Response List(int pageNumber, int pageSize) {
+	public Response List() {
 		if (this.textChannel == null) {
 			return new Response("Алдаа гарлаа", 400, new ArrayList<Message>());
 		}
@@ -45,10 +45,7 @@ public class Message implements Serializable {
 		Session session = Database.sessionFactory.openSession();
 		session.beginTransaction();
 
-		List<Message> messages = session.createQuery("from Message where textChannel = ?1")
-				.setParameter(1, this.textChannel)
-				.setFirstResult((pageNumber - 1) * pageSize)
-				.setMaxResults(pageSize).list();
+		List<Message> messages = session.createQuery("from Message where textChannel = ?1 order by createdAt DESC ").setParameter(1, this.textChannel).list();
 
 		session.getTransaction().commit();
 
@@ -79,13 +76,13 @@ public class Message implements Serializable {
 
 		session.getTransaction().commit();
 
-		ObjectOutputStream out = null;
-		for (Socket client: Server.clients) {
+		for (Server.ClientHandler client: Server.clients) {
             try {
-                out = new ObjectOutputStream(client.getOutputStream());
-				out.writeObject(new Response("New msg", 200, message));
+				if (!client.clientSocket.isClosed() && !client.user.id.equals(message.author.id)) {
+					client.out.writeObject(new Response("New msg", 200, message, "chat"));
+				}
 			} catch (IOException e) {
-				throw new RuntimeException(e);
+				e.printStackTrace();
 			}
 		}
 

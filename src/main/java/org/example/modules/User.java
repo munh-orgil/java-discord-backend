@@ -11,6 +11,7 @@ import javax.xml.crypto.Data;
 import java.io.File;
 import java.io.Serial;
 import java.io.Serializable;
+import java.net.Socket;
 import java.sql.Timestamp;
 
 @Entity
@@ -32,6 +33,8 @@ public class User implements Serializable {
 	public Long isMuted;
 	public Long isDeafened;
 	public Timestamp createdAt;
+	@Transient
+	public Socket voiceSocket;
 
 	public User() {}
 
@@ -140,5 +143,13 @@ public class User implements Serializable {
 
 		res = new Response("Амжилттай", 200, user);
 		return res;
+	}
+
+	@Override
+	public String toString() {
+		return "User:\n" +
+				"id: " + id.toString() + "\n" +
+				"email: " + email + "\n" +
+				"nickname: " + nickname + "\n";
 	}
 }

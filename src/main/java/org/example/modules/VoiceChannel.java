@@ -3,10 +3,12 @@ package org.example.modules;
 import jakarta.persistence.*;
 import org.example.database.Database;
 import org.example.socket.Response;
+import org.example.socket.VoiceServer;
 import org.hibernate.Session;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.net.Socket;
 import java.sql.Timestamp;
 
 @Entity
@@ -21,6 +23,8 @@ public class VoiceChannel implements Serializable {
 	public Long serverId;
 	public Long sequence;
 	public Timestamp createdAt;
+	@Transient
+	public Socket clientSocket;
 
 	public VoiceChannel() {
 
@@ -30,6 +34,17 @@ public class VoiceChannel implements Serializable {
 	public void onCreate() {
 		createdAt = new Timestamp(System.currentTimeMillis());
 	}
+
+	public Response Join(User reqUser) {
+		if (id == null || id == 0) {
+			return new Response("Алдаа гарлаа", 400, null);
+		}
+		VoiceServer.clientMap.get(id).add(reqUser);
+		return new Response("Амжилттай", 200, null);
+	}
+//	public Response Leave() {
+//
+//	}
 
 	public Response Create(User reqUser) {
 		VoiceChannel voiceChannel = new VoiceChannel();
