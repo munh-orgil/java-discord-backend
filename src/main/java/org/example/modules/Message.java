@@ -21,6 +21,7 @@ public class Message implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long id;
+	@Column(columnDefinition="TEXT")
 	public String content;
 	@ManyToOne
 	@JoinColumn(name = "author_id")
