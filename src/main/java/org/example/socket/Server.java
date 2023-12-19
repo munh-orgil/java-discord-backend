@@ -1,18 +1,20 @@
 package org.example.socket;
 
+import com.mysql.cj.xdevapi.Client;
 import org.example.modules.User;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Server {
-    public static Map<String, User> userMap;
     public static ServerSocket server = null;
     public static List<ClientHandler> clients = new ArrayList<ClientHandler>();
+    public static Map<String, User> ipUser = new HashMap<>();
     public static void Init() {
         try {
             server = new ServerSocket(5000);

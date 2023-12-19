@@ -61,6 +61,7 @@ public class User implements Serializable {
 		}
 		res = new Response("Амжилттай", 200, user);
 		client.user = user;
+		Server.ipUser.put(client.clientSocket.getInetAddress().getHostAddress(), user);
 		return res;
     }
 
@@ -145,6 +146,21 @@ public class User implements Serializable {
 		return res;
 	}
 
+	public boolean isDeaf() {
+		Session session = Database.sessionFactory.openSession();
+		session.beginTransaction();
+		Long isDeaf = (Long) session.createQuery("select isDeafened from User where id = ?1").setParameter(1, id).getSingleResultOrNull();
+		session.getTransaction().commit();
+		return isDeaf.equals(1L);
+	}
+
+	public boolean isMute() {
+		Session session = Database.sessionFactory.openSession();
+		session.beginTransaction();
+		Long isMute = (Long) session.createQuery("select isMuted from User where id = ?1").setParameter(1, id).getSingleResultOrNull();
+		session.getTransaction().commit();
+		return isMute.equals(1L);
+	}
 	@Override
 	public String toString() {
 		return "User:\n" +

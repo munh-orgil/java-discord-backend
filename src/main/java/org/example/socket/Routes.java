@@ -1,7 +1,14 @@
 package org.example.socket;
 
+import org.example.database.Database;
 import org.example.modules.*;
 import org.example.modules.Server;
+import org.hibernate.Session;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class Routes {
     public static Response Handle(Request request, org.example.socket.Server.ClientHandler client) {
@@ -31,6 +38,8 @@ public class Routes {
             case "voice_channel" -> {
                 VoiceChannel reqVoiceChannel = (VoiceChannel) request.body;
                 yield switch (request.method) {
+                    case "join" -> reqVoiceChannel.Join(client);
+                    case "leave" -> reqVoiceChannel.Leave(client);
                     case "create" -> reqVoiceChannel.Create(client.user);
                     case "edit" -> reqVoiceChannel.Edit(client.user);
                     case "delete" -> reqVoiceChannel.Delete(client.user);
