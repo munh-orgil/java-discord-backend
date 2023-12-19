@@ -60,7 +60,7 @@ public class VoiceServer {
             try {
                 outStream = clientSocket.getOutputStream();
                 inStream = clientSocket.getInputStream();
-                byte[] receiveData = new byte[20000];
+                byte[] receiveData = new byte[50000];
                 while (inStream.read(receiveData) != -1) {
                     List<ClientHandler> clients = VoiceServer.voiceUsers.get(currentVoiceChannel.id);
                     for (ClientHandler client: clients) {
